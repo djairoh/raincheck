@@ -9,6 +9,7 @@ use std::ffi::OsString;
 
 
 fn main() {
+    // CLI options
     let cli:Cli = Cli::parse();
 
     // logging initialisation
@@ -16,5 +17,14 @@ fn main() {
     if let Err(e) = env_logger::init() {
       error!("{e}");
       return
+    }
+
+    match confy::load::<Config>("raincheck", cli.config_file.as_str()) {
+        Ok(cfg) => {
+            println!("{}", cfg.api_key);
+        },
+        Err(e) => {
+            error!("{e}");
+        },
     }
 }
